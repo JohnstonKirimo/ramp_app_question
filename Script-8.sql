@@ -1,8 +1,10 @@
-
+/* Creating table */
 CREATE TABLE transactions (
   "transaction_time" TIMESTAMP,
   "transaction_amount" FLOAT
 );
+
+/*Inserting data into the table  */
 
 INSERT INTO transactions
   ("transaction_time", "transaction_amount")
@@ -122,10 +124,7 @@ VALUES
   ('2021-01-02 00:09:43.000000', '49.00'),
   ('2021-01-08 00:49:22.000000', '31.61');
 
-
---PRAGMA table_info(transactions);
-
---select * from transactions t1 order by t1.transaction_time  asc;
+/*creating a view to keep daily total of transactions */
 
 create view transact_v1 as 
 select date(t.transaction_time) as transaction_date, sum(t.transaction_amount) as daily_total 
@@ -134,7 +133,7 @@ group by transaction_date
 order by daily_total  
 ; 
 
---select * from transact_v1; 
+/*calculating three day rolling average */
 
 select transaction_date, 
 	   daily_total,
@@ -145,17 +144,6 @@ select transaction_date,
 	as threeday_rolling_avg
 from transact_v1; 
 
-
-/*
-select transaction_time, 
-	   transaction_amount,
-	   AVG(transaction_amount) OVER (
-	order by transaction_time
-	rows between 2 preceding and current row
-	)
-	as rolling_avg
-from transactions; 
-*/
 
 
 
